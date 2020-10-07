@@ -2,6 +2,9 @@ import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 
 import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatSlideToggleModule } from '@angular/material/slide-toggle';
+import { MatRadioModule } from '@angular/material/radio';
+
 import { MatButtonModule } from '@angular/material/button';
 import { MatListModule } from '@angular/material/list';
 import { MatSliderModule } from '@angular/material/slider';
@@ -15,7 +18,9 @@ import { MatInputModule } from '@angular/material/input';
 import { MatCardModule } from '@angular/material/card';
 import { DragDropModule } from '@angular/cdk/drag-drop';
 import { FormsModule } from '@angular/forms';
-
+import { HttpClientModule } from '@angular/common/http';
+import { MatIconModule } from '@angular/material/icon';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
 @NgModule({
   declarations: [
     AppComponent,
@@ -25,6 +30,9 @@ import { FormsModule } from '@angular/forms';
   ],
   imports: [
     BrowserModule,
+    HttpClientModule,
+    MatSnackBarModule,
+    MatIconModule,
     FormsModule,
     MatInputModule,
     MatListModule,
@@ -35,8 +43,12 @@ import { FormsModule } from '@angular/forms';
     MatSliderModule,
     AppRoutingModule,
     BrowserAnimationsModule,
+    MatSlideToggleModule,
+    MatRadioModule,
   ],
-  providers: [],
+  providers: [
+    { provide: 'apiUrl', useValue: 'https://api.limantech.com/todo' },
+  ],
   bootstrap: [AppComponent],
 })
 export class AppModule {}

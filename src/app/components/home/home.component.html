@@ -43,7 +43,19 @@
                 cdkDrag
               >
                 <img class="svg" src="assets/svg/1.png" />
-                {{ item }}
+                <span class="todo-title">{{ item.todo }}</span>
+                <div class="button">
+                  <button
+                    mat-icon-button
+                    color="warn"
+                    (click)="removeTodo(item.id)"
+                  >
+                    <mat-icon>delete</mat-icon>
+                  </button>
+                </div>
+              </div>
+              <div class="text-center pt-3" *ngIf="data.pendings.length === 0">
+                <small> Bekleyen iş yok</small>
               </div>
             </div>
           </div>
@@ -65,7 +77,22 @@
                 cdkDrag
               >
                 <img class="svg" src="assets/svg/2.png" />
-                {{ item }}
+                <span class="todo-title">{{ item.todo }}</span>
+                <div class="button">
+                  <button
+                    mat-icon-button
+                    color="warn"
+                    (click)="removeTodo(item.id)"
+                  >
+                    <mat-icon>delete</mat-icon>
+                  </button>
+                </div>
+              </div>
+              <div
+                class="text-center pt-3"
+                *ngIf="data.inProgress.length === 0"
+              >
+                <small> Yapım aşamasında olan bir madde yok</small>
               </div>
             </div>
           </div>
@@ -83,7 +110,19 @@
             >
               <div class="example-box" *ngFor="let item of data.done" cdkDrag>
                 <img class="svg" src="assets/svg/3.png" />
-                {{ item }}
+                <span class="todo-title">{{ item.todo }}</span>
+                <div class="button">
+                  <button
+                    mat-icon-button
+                    color="warn"
+                    (click)="removeTodo(item.id)"
+                  >
+                    <mat-icon>delete</mat-icon>
+                  </button>
+                </div>
+              </div>
+              <div class="text-center pt-3" *ngIf="data.done.length === 0">
+                <small> Tamamlananlar da iş yok</small>
               </div>
             </div>
           </div>

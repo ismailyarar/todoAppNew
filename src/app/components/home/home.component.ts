@@ -1,9 +1,12 @@
 import { Component, OnInit } from '@angular/core';
+import { TodoService } from 'src/app/services/todo.service';
 import {
   CdkDragDrop,
   moveItemInArray,
   transferArrayItem,
 } from '@angular/cdk/drag-drop';
+import { MatSnackBar } from '@angular/material/snack-bar';
+
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
@@ -11,20 +14,17 @@ import {
 })
 export class HomeComponent implements OnInit {
   data = {
-    pendings: ['Get to work', 'Pick up groceries', 'Go home', 'Fall asleep'],
-    inProgress: [
-      'Get up',
-      'Brush teeth',
-      'Take a shower',
-      'Check e-mail',
-      'Walk dog',
-    ],
-    done: ['Get up', 'Brush teeth', 'Take a shower'],
+    pendings: [],
+    inProgress: [],
+    done: [],
   };
-  constructor() {}
-
+  constructor(
+    private todoService: TodoService,
+    private _snackBar: MatSnackBar
+  ) {}
+  //servisimizi tanımıyoruz
   ngOnInit(): void {
-    this.setItems(); //component ilk açıldığında setItems metodumuz çalışacak
+    this.getAllTodos();
   }
   drop(event: CdkDragDrop<string[]>) {
     if (event.previousContainer === event.container) {
@@ -40,30 +40,64 @@ export class HomeComponent implements OnInit {
         event.previousIndex,
         event.currentIndex
       );
-      Object.keys(this.data).forEach((key) => {
-        
-          localStorage.setItem(key, JSON.stringify(this.data[key]));
-        
-        
-      });
     }
+    this.updateTodo();
   }
   addTodo(todo) {
-    //console.log(todo.value);
-    this.data.pendings.push(todo.value);
-    todo.value = '';
-    localStorage.setItem('pendings', JSON.stringify(this.data.pendings));
+    const obj = { todo: todo.value };
+    this.todoService.addTodo(obj).subscribe(
+      //subscribe ile sonucu yakalıyoruz acaba hata mı geliyor ne geliyor
+      (res: any) => {
+        this.openSnackBar(res.message);
+        this.getAllTodos();
+        todo.value = '';
+      },
+      (err) => {
+        console.log(err);
+      } //addTodo todo alacak,Serviste bir obje alacak demiştik todo içerisinde input değerini gönderecez
+    );
   }
-  setItems() {
-    //localstorage da sakladığımız için string olarak çeviriyoruz,dizi gibi değil
-
-    Object.keys(this.data).forEach((key) => {
-      if (!localStorage.getItem(key)) {
-        localStorage.setItem(key, JSON.stringify(this.data[key]));
-      } else {
-        this.data[key] = JSON.parse(localStorage.getItem(key));
+  getAllTodos() {
+    this.todoService.getAllTodos().subscribe(
+      (res) => {
+        console.log(res);
+        Object.keys(res).forEach((key) => {
+          this.data[key] = res[key];
+          console.log(key);
+        });
+      },
+      (err) => {
+        console.log(err);
       }
-      
+    );
+  }
+  updateTodo() {
+    this.todoService.updateTodo(this.data).subscribe(
+      (res) => {
+        console.log(res);
+      },
+      (err) => {
+        console.log(err);
+      }
+    );
+  }
+
+  removeTodo(id) {
+    if (confirm('Bu maddeyi silmek istediğinize emin misiniz?')) {
+      this.todoService.removeTodo(id).subscribe(
+        (res) => {
+          console.log(res);
+          this.getAllTodos();
+        },
+        (err) => {
+          console.log(err);
+        }
+      );
+    }
+  }
+  openSnackBar(message: string) {
+    this._snackBar.open(message, 'tamam', {
+      duration: 2000,
     });
   }
 }

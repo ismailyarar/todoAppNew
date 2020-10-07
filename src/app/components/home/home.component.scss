@@ -18,7 +18,7 @@
 .example-box {
   padding: 20px 10px;
   border-bottom: solid 1px #ccc;
-  color: rgba(0, 0, 0, 0.87);
+  color: black;
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -27,10 +27,28 @@
   cursor: move;
   background: white;
   font-size: 14px;
+
   .svg {
     width: 24px;
     height: 24px;
     margin-right: 10px;
+  }
+  .todo-title {
+    flex: 1;
+  }
+  .button {
+    opacity: 0;
+    transition: 0.3s;
+
+    button {
+      height: 24px;
+      line-height: 24px;
+    }
+  }
+  &:hover {
+    .button {
+      opacity: 1;
+    }
   }
 }
 
